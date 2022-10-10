@@ -13,16 +13,18 @@ def detect_car(frame,x,y,x1,y1,cars,tic_since_car_count,stamp , average_color_ba
         if stamp-tic_since_car_count > 1:
             cars=cars+1
             tic_since_car_count=stamp
-            color_car = findCar_color(cropped_frame)
+            color_car = findCar_color(frame[y-30:y1,x:x1])
             print('Car detected color diff: ' + str(abs(average_color_background - average_color)))
     return cars, average_color, tic_since_car_count , color_car
 
 
 def findCar_color(frame):
-    average_color_row = np.average(frame, axis=0)
-    average_color = np.average(average_color_row, axis=0)
-    color_hex = RGB2HEX(average_color)
-    print(color_hex)
+    cropped_frame=frame[0:10,80:100]
+    cv.imshow("teste",cropped_frame)
+    cv.rectangle(frame, (80,0), (100, 10), (0, 255, 0), 2)
+    average_color_row = np.median(cropped_frame, axis=0)
+    average_color = np.median(average_color_row, axis=0)
+    print(average_color)
     return  average_color
             
 
@@ -37,7 +39,7 @@ def main():
         {'name': 'rec1' , 'x1' : 150 , 'y1' : 500 , 'x2' : 350 , 'y2' : 600 , 'model_avgColor': 100 , 'tic_since_car_count': 0 , 'AverageBackground_compare' : 115},
         {'name': 'rec2' , 'x1' : 400 , 'y1' : 500 , 'x2' : 600 , 'y2' : 600 ,'model_avgColor': 100 , 'tic_since_car_count': 0 , 'AverageBackground_compare' : 110},
         {'name': 'rec3' , 'x1' : 700 , 'y1' : 500 , 'x2' : 900 , 'y2' : 600 ,'model_avgColor': 100 , 'tic_since_car_count': 0 , 'AverageBackground_compare' : 128},
-        {'name': 'rec4' , 'x1' : 1000 , 'y1' : 500 , 'x2' : 1200 , 'y2' : 600 ,'model_avgColor': 100 , 'tic_since_car_count': 0 , 'AverageBackground_compare' : 118}
+        {'name': 'rec4' , 'x1' : 950 , 'y1' : 500 , 'x2' : 1150 , 'y2' : 600 ,'model_avgColor': 100 , 'tic_since_car_count': 0 , 'AverageBackground_compare' : 118}
     ]
     avg_color_lane0_bgr=(0,0,0)
     avg_color_lane1_bgr=(0,0,0)
