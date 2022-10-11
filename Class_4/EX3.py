@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import csv
 import copy
+from functions import Detection,Tracking
 
 def main():
 
@@ -13,6 +14,7 @@ def main():
 
     body_detector=cv2.CascadeClassifier(cv2.data.haarcascades +'haarcascade_fullbody.xml')
 
+    id = 0
     #Generate random color for each person and store it
     number_person=0
     for row in data_array:
@@ -29,10 +31,10 @@ def main():
     while cap.isOpened():
         ret, frame = cap.read()
         img_gui = copy.deepcopy(frame) #For printing to not lose original image
-        img_gray=cv2.cvtColor(img_gui,cv2.COLOR_BGR2GRAY)
         frame_height, frame_width = frame.shape[:2]
         currentFrame = cap.get(cv2.CAP_PROP_POS_FRAMES)
-        #img_gui = cv2.resize(img_gui, [frame_width//2, frame_height//2])
+        img_gui = cv2.resize(img_gui, [frame_width//2, frame_height//2])
+        img_gray=cv2.cvtColor(img_gui,cv2.COLOR_BGR2GRAY)
 
 
         #Draw images
@@ -59,14 +61,17 @@ def main():
         bboxes = body_detector.detectMultiScale(img_gray, scaleFactor=1.2,minNeighbors=4,minSize=(30, 30))
         #bbox is like [x,y,w,h] 
         for bbox in bboxes:
-            x1,y1,w,h=bbox
-            color=colors[personNumber,:]
-            cv2.rectangle(img_gui, (x1,y1), (x1+w,y1+h), (int(color[0]),int(color[1]),int(color[2])), 2, 1)
+            x,y,w,h = bbox
+            detection = Detection(x,y,w,h,img_gui,id)
+            color=colors[id,:]
+            detection.draw_rectangle(color)
+            id+=1
+            tracking=Tracking(detection,id)
+            tracking.draw_rectangle(img_gui,color=[255,0,0])
 
-        #Template Matching
 
         cv2.imshow('Initial', img_gui)
-        if cv2.waitKey(3) == ord('q'):
+        if cv2.waitKey(0) == ord('q'):
             break
 
     cap.release()
