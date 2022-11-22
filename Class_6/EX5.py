@@ -49,7 +49,6 @@ for best_two_match in best_two_matches:
         h,w, _ = t_gui.shape
         pts = np.float32([ [0,0],[0,h-1],[w-1,h-1],[w-1,0] ]).reshape(-1,1,2)
     else:
-        #print( "Not enough matches are found - {}/{}".format(len(matches), MIN_MATCH_COUNT) )
         matchesMask = None
 
 dst = cv2.perspectiveTransform(pts,matrix)
@@ -64,18 +63,12 @@ cv2.resizeWindow("Homography",600,400)
 
 
 for idx,kp in enumerate(q_kp):
-    #print('key_poin' + str(idx) + ':' +str(kp))
-    #print('x:' +str(kp.pt[0]))
-    #print('y:' +str(kp.pt[1]))
     x= int(kp.pt[0])
     y= int(kp.pt[1])
     color = (randint(0,255), randint(0,255), randint(0,255))
     cv2.circle(q_gui,(x,y),20,color,3)
 
 for idx,kp in enumerate(t_kp):
-    #print('key_poin' + str(idx) + ':' +str(kp))
-    #print('x:' +str(kp.pt[0]))
-    #print('y:' +str(kp.pt[1]))
     x= int(kp.pt[0])
     y= int(kp.pt[1])
     color = (randint(0,255), randint(0,255), randint(0,255))
