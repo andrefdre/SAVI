@@ -56,7 +56,7 @@ def main():
     learning_rate=0.001
     maximum_num_epochs = 500
     termination_loss_threshold = 0.05
-    criterion = torch.nn.CrossEntropyLoss()
+    loss_function = torch.nn.CrossEntropyLoss()
     optimizer= torch.optim.Adam(model.parameters() , lr=learning_rate)
 
     #TODO ver a loss function
